@@ -52,6 +52,8 @@ header.nav a.nl:hover { color:var(--fg); text-decoration:none; }
        border:1px solid var(--line2); background:var(--s2); color:var(--fg); }
 .btn.primary { background:var(--green2); border-color:var(--green2); color:#eafff4; }
 .btn.primary:hover { background:#1fb471; }
+.btn.blue { background:#1f6feb; border-color:#1f6feb; color:#eaf3ff; }
+.btn.blue:hover { background:#3b82f6; }
 .btn:hover { text-decoration:none; border-color:var(--faint); }
 
 main { display:block; }
