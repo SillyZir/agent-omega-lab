@@ -1,0 +1,13 @@
+diff --git a/cache.go b/cache.go
+index d4ad4f7..8ca9aca 100644
+--- a/cache.go
++++ b/cache.go
+@@ -35,7 +35,7 @@ func (c *Cache) Get(key string) (string, bool) {
+ // Put stores a result, evicting the least recently used entry if full.
+ func (c *Cache) Put(key, val string) {
+ 	key = NormalizeKey(key)
+-	if _, exists := c.data[key]; !exists && len(c.data) >= c.cap {
++	if _, exists := c.data[key]; !exists && len(c.data) > c.cap {
+ 		c.evict()
+ 	}
+ 	c.data[key] = val

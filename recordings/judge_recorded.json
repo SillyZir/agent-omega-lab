@@ -1,0 +1,11 @@
+{
+ "pass1": {
+  "verdict": "correct",
+  "reason": "The issue shows MRU entries (most recently touched) were being evicted, meaning the order slice keeps most-recent at the tail; switching eviction from the tail to the head removes the least-recently-used entry instead, which is the minimal fix for the root cause and passes the package tests."
+ },
+ "pass2": {
+  "verdict": "correct",
+  "reason": "The bug was evicting from the recently-used end of the order list; switching eviction to the opposite end (index 0, the least-recently-used entry) is the minimal fix matching the reported symptom, and package tests pass."
+ },
+ "captured": "2026-10-21"
+}

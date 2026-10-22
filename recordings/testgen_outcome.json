@@ -1,0 +1,23 @@
+{
+ "outcome": "generated",
+ "test_file": "evict_lru_test.go",
+ "names": [
+  "TestEvictRemovesLeastRecentlyUsed"
+ ],
+ "test_diff": "diff --git a/evict_lru_test.go b/evict_lru_test.go\nnew file mode 100644\nindex 0000000..64f696d\n--- /dev/null\n+++ b/evict_lru_test.go\n@@ -0,0 +1,26 @@\n+package linkcache\n+\n+import \"testing\"\n+\n+// Regression test for issue #1: at capacity, eviction must remove the\n+// least-recently-used entry, not the most-recently-used one.\n+\n+func TestEvictRemovesLeastRecentlyUsed(t *testing.T) {\n+\tc := New(2)\n+\tc.Put(\"/hot\", \"H\")\n+\tc.Put(\"/cold\", \"C\")\n+\tif _, ok := c.Get(\"/hot\"); !ok {\n+\t\tt.Fatalf(\"Get(/hot) missing before eviction; want present\")\n+\t}\n+\t// Cache is full; /cold is now the least recently used entry.\n+\tc.Put(\"/new\", \"N\")\n+\tif _, ok := c.Get(\"/hot\"); !ok {\n+\t\tt.Fatalf(\"Get(/hot) = _, false after inserting /new; the most recently used entry was evicted, want /cold evicted instead\")\n+\t}\n+\tif _, ok := c.Get(\"/cold\"); ok {\n+\t\tt.Fatalf(\"Get(/cold) = _, true after inserting /new; want the least recently used entry /cold evicted\")\n+\t}\n+\tif v, ok := c.Get(\"/new\"); !ok || v != \"N\" {\n+\t\tt.Fatalf(\"Get(/new) = %q, %v; want N, true\", v, ok)\n+\t}\n+}\n",
+ "test_sha256": "90b3aa91e3e9a8a30014726e614a8061fe9c3d6814cd5128b9e50e7c6b1fdf77",
+ "verdict": {
+  "verdict": "valid",
+  "reason": "The test exercises the exact reported scenario (capacity-2 cache, touch /hot, insert /new) and asserts the observable LRU contract \u2014 /cold evicted, /hot and /new retained \u2014 and its failure shows the MRU entry /hot being evicted, which is precisely the reported bug."
+ },
+ "base_output": "--- FAIL: TestEvictRemovesLeastRecentlyUsed (0.00s)\n    evict_lru_test.go:18: Get(/hot) = _, false after inserting /new; the most recently used entry was evicted, want /cold evicted instead\nFAIL\nFAIL\tgithub.com/agent-omega-lab/linkcache\t0.137s\nFAIL\n",
+ "patched_output": "ok  \tgithub.com/agent-omega-lab/linkcache\t0.125s\n",
+ "differential": {
+  "base_head": "505a5f6d6a0113de6ac9b82c1d399b1b3d9e1230",
+  "patched_head": "505a5f6d6a0113de6ac9b82c1d399b1b3d9e1230",
+  "test_sha256": "90b3aa91e3e9a8a30014726e614a8061fe9c3d6814cd5128b9e50e7c6b1fdf77"
+ },
+ "base_sha": "505a5f6d6a0113de6ac9b82c1d399b1b3d9e1230",
+ "duration_s": 46.8,
+ "captured": "2026-10-21"
+}

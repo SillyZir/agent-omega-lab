@@ -1,0 +1,19 @@
+# Verbatim transcript of tools/record.py producing these recordings.
+# One sanitization: local absolute paths are masked as <LAB>/<HOME>.
+
+━━━ setup: fresh working checkout of target/  [DETERMINISTIC — executing for real on this machine]
+working checkout: <LAB>/.work/linkcache
+base sha: 505a5f6d6a0113de6ac9b82c1d399b1b3d9e1230
+[2026-10-21T22:45:01-0400] STEP 1/4 — live localization session
+[2026-10-21T22:45:14-0400] localized -> ['cache.go'] (err='') in 13.0s
+[2026-10-21T22:45:14-0400] STEP 2/4 — live fix session (tree left patched)
+[2026-10-21T22:45:36-0400] fix declared={'done': True, 'files': ['cache.go'], 'summary': 'Fixed evict() in cache.go to remove order[0] (the least-recently-used key) instead of the last element (the most-recently-used key).'} err='' in 22.0s (331 byte diff)
+[2026-10-21T22:45:36-0400] sanity: full test suite on the patched tree
+[2026-10-21T22:45:36-0400] tests on patched tree: passed=True status=''
+[2026-10-21T22:45:36-0400] STEP 3/4 — live regression-test generation (fix-blind differential)
+[2026-10-21T22:46:23-0400] testgen outcome='generated' in 46.8s
+[2026-10-21T22:46:23-0400] regression test saved: recordings/testgen/evict_lru_test.go
+[2026-10-21T22:46:23-0400] STEP 4/4 — judge passes: recorded fix (x2) and wrong patch (x2)
+[2026-10-21T22:46:38-0400] fix: pass1={'verdict': 'correct', 'reason': 'The issue shows MRU entries (most recently touched) were being evicted, meaning the order slice keeps most-recent at the tail; switching eviction from the tail to the head removes the least-recently-used entry instead, which is the minimal fix for the root cause and passes the package tests.'} pass2={'verdict': 'correct', 'reason': 'The bug was evicting from the recently-used end of the order list; switching eviction to the opposite end (index 0, the least-recently-used entry) is the minimal fix matching the reported symptom, and package tests pass.'}
+[2026-10-21T22:46:51-0400] wrong: pass1={'verdict': 'incorrect', 'reason': 'The patch only changes the capacity check from >= to > — which lets the cache grow past its stated capacity (breaking the capacity-bound tests) — while leaving the actual root cause, the evict() routine removing the most-recently-used entry instead of the least-recently-used one, completely untouched.'} pass2={'verdict': 'incorrect', 'reason': 'The patch merely delays eviction by one insert (letting the cache exceed its capacity bound, as the failing tests confirm) and never fixes the actual root cause — evict() removing the most-recently-used entry instead of the least-recently-used one.'}
+[2026-10-21T22:46:51-0400] RECORDING COMPLETE — all artifacts written to recordings/

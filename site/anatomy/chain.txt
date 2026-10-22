@@ -1,0 +1,5 @@
+# Verbatim executor log, 2026-09-01 (published in the showcase repo:
+# Agent-Omega/examples/sample_execution_log.md)
+
+[2026-09-01T09:18:46-04:00] executor cycle start (2026-09-01) mode=LIVE
+[2026-09-01T09:35:17-04:00] invoking pipeline for esengine/DeepSeek-Reasonix issue 9516 (dry_run=False, run_id=exec-2026-09-01-9516-93547)

@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anatomy of one autonomous fix — Agent Omega</title>
+<meta name="description" content="The complete, evidence-backed story of DeepSeek-Reasonix PR #9707: a bug report, an autonomous localization, patch, regression test, two reviews and 15 gates — and a maintainer's merge 24 days later.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta property="og:title" content="Anatomy of one autonomous fix — Agent Omega">
+<meta property="og:description" content="Issue filed Aug 28. Fixed, tested, reviewed, gated and shipped by a machine Sept 1 in 18 minutes. Merged by the maintainer Sept 25. Every step with its real artifact.">
+<meta property="og:image" content="https://omegademo.com/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2305070a'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%233fd68f' font-family='Georgia,serif'%3EΩ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<style>
+  .step { display:grid; grid-template-columns:120px 1fr; gap:20px; margin:34px 0; }
+  .step > * { min-width:0; }
+  .when { color:var(--faint); font-size:12.5px; text-align:right;
+          font-variant-numeric:tabular-nums; padding-top:3px; }
+  .when b { display:block; color:var(--dim); font-size:13px; }
+  .act { display:inline-block; font-size:10px; padding:2px 9px; border-radius:20px;
+         font-weight:700; letter-spacing:.08em; margin-left:8px; vertical-align:2px; }
+  .act.sys { color:var(--green); background:#3fd68f16; border:1px solid #3fd68f33; }
+  .act.hum { color:var(--blue); background:#6cb6ff16; border:1px solid #6cb6ff33; }
+  .step h3 { margin:0 0 6px; font-size:16.5px; }
+  .step p { margin:0 0 10px; color:var(--dim); font-size:14px; max-width:640px; }
+  .step .console { max-height:340px; }
+  @media (max-width:760px){ .step { grid-template-columns:1fr; gap:6px; }
+    .when { text-align:left; } }
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="wrapm">
+  <span class="brand"><span class="om">Ω</span> Agent Omega</span>
+  <nav aria-label="Sections" style="display:contents">
+    <a class="nl" href="index.html">Home</a>
+    <a class="nl" href="index.html#demo">Demo</a>
+    <a class="nl" href="index.html#prs">Merged PRs</a>
+    <a class="nl" href="https://github.com/SillyZir/Agent-Omega">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+
+<main>
+<section style="padding-bottom:10px">
+  <div class="kicker">Anatomy of one autonomous fix</div>
+  <h1>A bug report went in.<br>A merged fix came out.<br>
+      <span class="hl">No human touched the middle.</span></h1>
+  <p class="cap" style="max-width:680px">This is the complete record of
+  <a href="https://github.com/esengine/DeepSeek-Reasonix/pull/9707">DeepSeek-Reasonix
+  PR #9707</a> — the one fix Omega carried from selection to pull request with
+  no human in the loop. Every pane below is a verbatim artifact from the
+  <a href="https://github.com/SillyZir/Agent-Omega/blob/main/examples/sample_execution_log.md">published
+  execution record</a> or the public GitHub trail; nothing is recreated. Steps
+  are labeled by who acted: <span class="act sys">OMEGA</span> the system,
+  <span class="act hum">HUMAN</span> people outside it.</p>
+</section>
+
+<section style="padding-top:0">
+
+  <div class="step">
+    <div class="when"><b>Aug 28</b> 2026</div>
+    <div>
+      <h3>A user hits a bug and reports it <span class="act hum">HUMAN</span></h3>
+      <p>A Reasonix user finds that tools exposed by a live MCP server don't
+      show up in the agent's capability catalog, and files an ordinary bug
+      report. Omega has nothing to do with this step — it's the raw material.</p>
+      <div class="console" data-fill="evidence/anatomy/issue.txt" data-eager>loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> 09:18</div>
+    <div>
+      <h3>The morning run picks this issue <span class="act sys">OMEGA</span></h3>
+      <p>Omega's daily chain wakes on schedule. Its scout had ranked the issue
+      against every open candidate — concrete repro steps, a bug label, a
+      bounded scope — and the executor hands it to the pipeline. No person
+      chose this issue.</p>
+      <div class="console" data-fill="evidence/anatomy/chain.txt" data-eager style="max-height:120px">loading…</div>
+      <p style="margin-top:10px">The scout's actual ranking row:</p>
+      <div class="console" data-fill="evidence/anatomy/scout_row.txt" data-eager style="max-height:170px">loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> 09:35</div>
+    <div>
+      <h3>It reads the code and writes a fix <span class="act sys">OMEGA</span></h3>
+      <p>A bounded model session explores a fresh checkout with file tools only
+      — no shell — and finds the root cause: one stale registry entry was
+      suppressing the <i>entire</i> live tool directory. Its declaration names
+      the file; the diff below is the production hunk of the merged PR,
+      verbatim from GitHub.</p>
+      <div class="console" data-fill="evidence/anatomy/declared.txt" data-eager style="max-height:200px">loading…</div>
+      <p style="margin-top:10px">The fix (the PR's other file is the test from
+      the next step — <a href="https://github.com/esengine/DeepSeek-Reasonix/pull/9707/files">full
+      diff</a>):</p>
+      <div class="console" data-fill="evidence/anatomy/fix.diff" data-eager>loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> </div>
+    <div>
+      <h3>It proves the fix with a test written blind <span class="act sys">OMEGA</span></h3>
+      <p>A separate session — deliberately never shown the fix — writes a
+      regression test from the issue alone. The recorded verification: the
+      test <b>fails on the unpatched code</b> with the user's exact symptom,
+      and <b>passes once the fix is applied</b>. A third, independent review
+      then judges whether the test actually captures the reported bug.</p>
+      <div class="console" data-fill="evidence/anatomy/testgen.txt" data-eager>loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> </div>
+    <div>
+      <h3>It reviews its own work — twice <span class="act sys">OMEGA</span></h3>
+      <p>Two independent review passes judge the patch. (In this system the
+      second pass exists to catch manipulation: issue text is written by
+      strangers, so pass 2 reads a sanitized copy — a steering phrase that
+      fooled pass 1 would make the verdicts diverge, and divergence fails the
+      gate.)</p>
+      <div class="console" data-fill="evidence/anatomy/judges.txt" data-eager>loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> </div>
+    <div>
+      <h3>Fifteen release gates say yes <span class="act sys">OMEGA</span></h3>
+      <p>Deterministic checks hold the only authority to ship: budgets,
+      capacity, scope, both judge verdicts, the verified test, content and
+      injection lints, size caps. Any failure — or any gate that errors —
+      would have routed this to a human instead. (The system has since grown a
+      16th gate; these are the fifteen in force that morning.)</p>
+      <div class="console" data-fill="evidence/anatomy/gates.txt" data-eager style="max-height:380px">loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 1</b> 09:53</div>
+    <div>
+      <h3>It opens the pull request <span class="act sys">OMEGA</span></h3>
+      <p>Thirty-five minutes after the pipeline started — eighteen of them on
+      this issue — Omega pushes branch <span class="mono">auto-fix/9516</span>
+      and opens <a href="https://github.com/esengine/DeepSeek-Reasonix/pull/9707">PR
+      #9707</a>, ready for review. This is the last action Omega takes.</p>
+      <div class="console" data-fill="evidence/anatomy/ship.txt" data-eager style="max-height:220px">loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"><b>Sept 25</b> </div>
+    <div>
+      <h3>The maintainer merges it <span class="act hum">HUMAN</span></h3>
+      <p>Twenty-four days later, the project's maintainer — a person with no
+      connection to Omega, applying their own judgment to an ordinary-looking
+      PR — merges it. Omega did nothing in the interval except read the PR's
+      public state once a day. The merge is entirely theirs; that is what makes
+      it evidence.</p>
+      <div class="console" data-fill="evidence/anatomy/merge.txt" data-eager style="max-height:240px">loading…</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="when"></div>
+    <div>
+      <h3>What this does — and doesn't — prove</h3>
+      <p>It proves the full loop can run unattended end-to-end and produce work
+      a real maintainer accepts: once, on this repo, under policies that
+      admitted it to the unattended path. It does not prove autonomy at scale —
+      the other ten merged PRs had a human review Omega's work before shipping,
+      which is the deliberate default. The point was never "no humans"; it's
+      that <i>authority lives in checks, not in the model</i> — this is the one
+      time the checks were the only reviewer, and the outcome held.</p>
+      <p><a class="btn primary" href="index.html#demo">Run the demonstration</a>
+         &nbsp;<a class="btn" href="index.html#details">Technical details</a></p>
+    </div>
+  </div>
+
+</section>
+</main>
+
+<footer><section>
+  <div class="foot-links">
+    <a href="index.html">← omegademo.com</a>
+    <a href="https://github.com/SillyZir/Agent-Omega">System showcase</a>
+    <a href="https://github.com/SillyZir/agent-omega-lab">Demonstration lab</a>
+  </div>
+  <div>Every pane is a verbatim artifact; provenance is stated in each file's
+  header. Nothing on this page executes.</div>
+</section></footer>
+
+<script src="app.js"></script>
+</body>
+</html>

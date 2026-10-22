@@ -1,0 +1,9 @@
+# Public issue, quoted from github.com/esengine/DeepSeek-Reasonix/issues/9516
+# (opened by a project user, 2026-08-28 — a HUMAN report, not Omega's)
+
+[Bug]: Capability catalog omits tools that the live MCP server exposes
+(stale/truncated tool list)
+
+"Product: Reasonix agent runtime (use_capability catalog) — environment:
+Windows, agent session with an external MCP server (e.g. a local bfexplorer
+MCP server) …"                                   [full text at the issue link]

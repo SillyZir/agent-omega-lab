@@ -1,0 +1,14 @@
+# Both review verdicts (verbatim from the recorded bundle, published in the
+# showcase execution log)
+
+judge pass 1 — "correct": "The patch fixes the actual root cause — a stale
+registry entry with any prefixed tool previously suppressed the entire live
+proxy tool directory — by always surfacing live tools when the server is Ready
+and suppressing only per-tool duplicates via a registered-name set, a minimal
+change that preserves dedup behavior and passes package tests."
+
+judge pass 2 (re-run on the final artifact) — "correct": "The patch fixes the
+root cause — an all-or-nothing suppression where any registry entry with the
+server's prefix hid the entire live tools/list — by switching to per-tool dedup
+so live-only tools like execute_console_script surface in the catalog, with a
+faithful reproduction test and passing package tests."

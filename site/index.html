@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Omega — autonomous AI repair system, demonstrated</title>
+<meta name="description" content="Agent Omega is an autonomous AI repair system for open-source projects, with maintainer-merged pull requests in Caddy, rclone, go-ethereum, and k3s. Explore the recorded demonstration.">
+<meta name="theme-color" content="#05070a">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta property="og:title" content="Agent Omega — autonomous AI repair system, demonstrated">
+<meta property="og:description" content="Recorded pipeline proof: localize, patch, regression-test, judge ×2, 16 fail-closed gates. Maintainer-merged PRs in Caddy, rclone, go-ethereum, k3s.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://omegademo.com">
+<meta property="og:image" content="https://omegademo.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://omegademo.com/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2305070a'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='%233fd68f' font-family='Georgia,serif'%3EΩ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#demo">Skip to the demonstration</a>
+
+<header class="nav"><div class="wrapm">
+  <span class="brand"><span class="om">Ω</span> Agent Omega</span>
+  <nav aria-label="Sections" style="display:contents">
+    <a class="nl" href="#demo">Demo</a>
+    <a class="nl" href="#prs">Merged PRs</a>
+    <a class="nl" href="https://github.com/SillyZir/Agent-Omega">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
+
+<main>
+<div class="herobg">
+<section id="top" class="hero">
+  <div>
+    <div class="kicker rise">Engineering demonstration</div>
+    <h1 class="rise d1">Autonomous <span class="hl">AI repair system</span>
+        for open-source projects.</h1>
+    <div class="h1sub rise d2">It finds real bugs in open-source projects, fixes
+    them, and gets the fixes accepted by the projects' own maintainers —
+    usually with a human reviewing its work; once, with no human involved
+    at all.</div>
+    <p class="rise d3" style="margin-top:30px; text-align:center">
+      <a class="btn primary" href="#demo">Explore the demo ↓</a></p>
+  </div>
+  <div class="herodetails rise d2" id="details">
+    <div class="seckick">Under the hood</div>
+    <h2 style="font-size:18px">Full technical details</h2>
+  <details class="acc"><summary>Pipeline architecture</summary><div class="inner">
+    <ul>
+      <li><b>Localize</b> — a read-only model session names the faulty files from the issue text alone <i>(88–93% top-1 on 37 ground-truth issues; keyword baseline 11%)</i>.</li>
+      <li><b>Patch</b> — a bounded session (file tools, no shell) edits the checkout; only the diff is kept.</li>
+      <li><b>Regression test</b> — a fix-blind session writes a test that must FAIL on base and PASS on patch, twice, stably.</li>
+      <li><b>Judge ×2</b> — independent review passes; the second reads <i>neutralized</i> issue text so steering produces a divergence.</li>
+      <li><b>16 release gates</b> — budgets, capacity, policy, scope, lints, breaker; a gate that errors fails closed.</li>
+    </ul>
+  </div></details>
+  <details class="acc" id="comparison"><summary>Correct fix vs wrong fix, side by side</summary><div class="inner cmp">
+    <div class="grid2">
+      <div class="good"><h3>The model's fix → shipped</h3>
+        <div class="console" data-fill="evidence/proof_good.txt">loading…</div></div>
+      <div class="bad"><h3>A plausible wrong fix → blocked</h3>
+        <div class="console" data-fill="evidence/proof_bad.txt">loading…</div></div>
+    </div>
+  </div></details>
+  <details class="acc"><summary>Full pipeline log (unabridged)</summary><div class="inner">
+    <div class="console" data-fill="evidence/demo_all.txt">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Verification suite</summary><div class="inner">
+    <div class="console" data-fill="evidence/verify.txt">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Real-world reproduction: go-ethereum #34692</summary><div class="inner">
+    <p class="cap">The seeded demo bug is synthetic by design. The same localization
+    session, pointed at go-ethereum before the maintainers fixed
+    <a href="https://github.com/ethereum/go-ethereum/issues/34692">issue #34692</a>,
+    named <code>node/rpcstack.go</code> top-1 in 9.6 s — matching
+    <a href="https://github.com/ethereum/go-ethereum/commit/d4027f3d4654b374b0962946b03d6f12e3b269ee">the merged fix</a>.
+    One benchmark data point; localization only; live runs vary.</p>
+    <div class="console" data-fill="evidence/realworld_run.txt" style="max-height:240px">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Numbers &amp; limitations</summary><div class="inner">
+    <ul>
+      <li><b>Localization:</b> 88–93% top-1 (100% top-3) on 37 issues with merged human fixes.</li>
+      <li><b>Fixes:</b> validated against merged human fixes pre-launch; 4/5 decisive runs passed the maintainers' own tests.</li>
+      <li><b>Honest negatives:</b> a Rust expansion closed NO-PROMOTE on pre-registered bars, twice; one PR withdrawn as a design finding.</li>
+      <li>The seeded demo bug is easier than production work; recorded output is recorded; live sessions vary.</li>
+      <li>A merged PR proves a change passed one repository's review — nothing more universal.</li>
+      <li>Reproduction tested on macOS/arm64 (go 1.25, python 3.14); Linux expected, unverified.</li>
+    </ul>
+  </div></details>
+  <details class="acc"><summary>Security model &amp; failure injection</summary><div class="inner">
+    <p class="cap"><b>Reasoning does not confer authority.</b> Model and external text
+    are untrusted inputs to a deterministic control plane. Six injected failures, six
+    blocks (the demo's third tab, or <code>make inject</code>):</p>
+    <ul>
+      <li>Plausible-but-wrong patch → tests catch it; <code>tests_pass</code> refuses.</li>
+      <li>Prompt-injection in the issue text → <code>injection_lint</code> refuses.</li>
+      <li>Diff touching CI config → <code>content_lint</code> refuses.</li>
+      <li>Oversized 40-file diff → <code>size_caps</code> refuses.</li>
+      <li>Tripped circuit breaker → <code>breaker_armed</code> refuses.</li>
+      <li>Missing state file → the gate <b>errors and fails closed</b>.</li>
+    </ul>
+    <p class="cap">This site is static files only — no backend, no analytics, no
+    cookies; nothing here can execute code or spend a model budget.</p>
+  </div></details>
+  <details class="acc"><summary>Reproduce it &amp; raw artifacts</summary><div class="inner">
+    <div class="console" style="max-height:none; overflow:visible">git clone https://github.com/SillyZir/agent-omega-lab
+cd agent-omega-lab
+make demo      # full pipeline, ~1 min, no API key needed
+make inject    # six blocked-failure scenarios
+make verify    # machine-checkable assertions</div>
+    <p class="cap"><code>MANIFEST.json</code> proves by sha256 that the modules doing
+    the work are byte-identical to the
+    <a href="https://github.com/SillyZir/Agent-Omega">published production code</a>;
+    <a href="https://github.com/SillyZir/agent-omega-lab">tools/record.py</a>
+    regenerates every recording under your own account.
+    Artifacts: <a href="evidence/fix.diff">the model's patch</a> ·
+    <a href="evidence/evict_lru_test.go">generated regression test</a> ·
+    <a href="evidence/wrong.diff">the wrong patch</a> ·
+    <a href="evidence/judge_recorded.json">judge verdicts (fix)</a> ·
+    <a href="evidence/judge_wrong.json">judge verdicts (wrong patch)</a> ·
+    <a href="evidence/testgen_outcome.json">regression-test record</a> ·
+    <a href="evidence/ISSUE.md">the seeded issue</a> ·
+    <a href="evidence/live_run.log">recording transcript</a></p>
+  </div></details>
+  </div>
+</section>
+</div>
+
+<section id="demo" style="padding-top:12px" aria-label="Recorded demonstration">
+  <div class="democard">
+    <div class="demohead"><span class="dot" aria-hidden="true"></span> Live Demonstration
+      <span class="mode">recorded session, deterministic replay — reproduce it:
+      <a href="https://github.com/SillyZir/agent-omega-lab" class="mono">make demo</a></span>
+    </div>
+    <div class="demobody">
+      <div class="steps" aria-hidden="true">
+        <div><span class="tick">✓</span>Localize — <span class="mono">cache.go</span></div>
+        <div><span class="tick">✓</span>Generate patch</div>
+        <div><span class="tick">✓</span>Regression test</div>
+        <div><span class="tick">✓</span>Judge ×2 — <i>correct</i></div>
+        <div><span class="tick">✓</span>16 release gates</div>
+      </div>
+      <div class="demomain">
+        <div class="tabs" id="demo-tabs" role="tablist" aria-label="Demonstration scenarios">
+          <button class="tab" role="tab" id="tab-good" aria-controls="view-good"
+            aria-selected="true" data-view="good">Correct fix ships</button>
+          <button class="tab" role="tab" id="tab-bad" aria-controls="view-bad"
+            aria-selected="false" data-view="bad">Wrong fix blocked</button>
+          <button class="tab" role="tab" id="tab-inject" aria-controls="view-inject"
+            aria-selected="false" data-view="inject">Failure injection ×6</button>
+        </div>
+        <div data-view="good" id="view-good" role="tabpanel" aria-labelledby="tab-good" tabindex="0">
+          <div class="panes2">
+            <div class="pane red"><h3>Tests FAIL on buggy code</h3>
+              <pre class="mono" data-fill="evidence/panel_fail.txt">loading…</pre></div>
+            <div class="pane green"><h3>Tests PASS on patch</h3>
+              <pre class="mono" data-fill="evidence/panel_pass.txt">loading…</pre></div>
+          </div>
+          <div class="strip go"><span class="g">✓</span> All 16 gates passed — SHIP PERMITTED</div>
+          <details class="acc slim" id="gates"><summary>Inspect all 16 release gates</summary>
+            <div class="inner"><div class="console" data-fill="evidence/gates.txt"
+                 style="max-height:360px">loading…</div></div></details>
+        </div>
+        <div data-view="bad" id="view-bad" role="tabpanel" aria-labelledby="tab-bad"
+             tabindex="0" style="display:none">
+          <div class="console" data-fill="evidence/proof_bad.txt">loading…</div>
+          <div class="strip no"><span class="g">✕</span> BLOCKED — tests fail, both judges: incorrect</div>
+        </div>
+        <div data-view="inject" id="view-inject" role="tabpanel" aria-labelledby="tab-inject"
+             tabindex="0" style="display:none">
+          <div class="console" data-fill="evidence/inject.txt">loading…</div>
+          <div class="strip go"><span class="g">✓</span> 6/6 bad ships blocked — a gate that errors fails closed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="prov">A seeded Go bug through the real pipeline modules. Model
+  stages replay a captured 2026-10-21 session; tests and gates execute
+  deterministically. Nothing runs on this site.</div>
+</section>
+
+<section id="prs" style="padding-top:22px">
+  <div class="seckick">Production record</div>
+  <h2>Merged pull requests</h2>
+  <p class="cap">Every link is the public record on GitHub.</p>
+  <div class="prtable"><table>
+    <thead><tr><th>Repository</th><th>PR</th><th class="t">Change</th><th>Status</th><th>Merged</th></tr></thead>
+    <tbody>
+    <tr><td>caddyserver/caddy</td><td><a href="https://github.com/caddyserver/caddy/pull/7898">#7898</a></td><td class="t">Register nested named-route invokes transitively</td><td><span class="badge m">Merged</span></td><td class="d">2026-07-30</td></tr>
+    <tr><td>caddyserver/caddy</td><td><a href="https://github.com/caddyserver/caddy/pull/7905">#7905</a></td><td class="t">Flush headers immediately for SSE responses</td><td><span class="badge m">Merged</span></td><td class="d">2026-07-31</td></tr>
+    <tr><td>caddyserver/caddy</td><td><a href="https://github.com/caddyserver/caddy/pull/7904">#7904</a></td><td class="t">Isolate auth-provider responses</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-01</td></tr>
+    <tr><td>rclone/rclone</td><td><a href="https://github.com/rclone/rclone/pull/9639">#9639</a></td><td class="t">serve nfs: fix EIO creating symlinks</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-01</td></tr>
+    <tr><td>caddyserver/caddy</td><td><a href="https://github.com/caddyserver/caddy/pull/7916">#7916</a></td><td class="t">Isolate health-check state per check config</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-12</td></tr>
+    <tr><td>caddyserver/caddy</td><td><a href="https://github.com/caddyserver/caddy/pull/7920">#7920</a></td><td class="t">Shield hostnames from wildcard client auth</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-12</td></tr>
+    <tr><td>ethereum/go-ethereum</td><td><a href="https://github.com/ethereum/go-ethereum/pull/35433">#35433</a></td><td class="t">Synthesize finalized markers only with explicit sync target</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-12</td></tr>
+    <tr><td>rclone/rclone</td><td><a href="https://github.com/rclone/rclone/pull/9726">#9726</a></td><td class="t">drive: pool resumable-upload chunk buffers</td><td><span class="badge m">Merged</span></td><td class="d">2026-08-30</td></tr>
+    <tr><td>rclone/rclone</td><td><a href="https://github.com/rclone/rclone/pull/9847">#9847</a></td><td class="t">onedrive: manual drive-ID fallback</td><td><span class="badge m">Merged</span></td><td class="d">2026-09-01</td></tr>
+    <tr><td>k3s-io/k3s</td><td><a href="https://github.com/k3s-io/k3s/pull/14552">#14552</a></td><td class="t">Restore Flatcar detection in install script</td><td><span class="badge m">Merged</span></td><td class="d">2026-09-03</td></tr>
+    <tr><td>esengine/DeepSeek-Reasonix</td><td><a href="https://github.com/esengine/DeepSeek-Reasonix/pull/9707">#9707</a></td><td class="t">Merge live proxy-observed MCP tools into catalog</td><td><span class="badge m">Merged</span> <span class="badge a">Autonomous</span></td><td class="d">2026-09-25</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section style="padding-top:14px" aria-label="Principles">
+  <div class="feats">
+    <div class="feat"><span class="ic" aria-hidden="true">⇄</span><b>Real upstream work</b>
+      Production repositories, real maintainer review — not a benchmark sandbox.</div>
+    <div class="feat"><span class="ic" aria-hidden="true">⛨</span><b>Fail-closed security</b>
+      Model output is a proposal; 16 deterministic gates hold ship authority.
+      UNKNOWN is never PASS.</div>
+    <div class="feat"><span class="ic" aria-hidden="true">⟳</span><b>Fully reproducible</b>
+      Open lab, sha-verified production modules, one-command demo on your machine.</div>
+    <div class="feat"><span class="ic" aria-hidden="true">≌</span><b>Honest measurement</b>
+      Pre-registered bars, published NO-GO verdicts, limitations stated plainly.</div>
+  </div>
+</section>
+
+<section id="decisions" style="padding-top:14px">
+  <div class="seckick">Judgment calls</div>
+  <h2>Three design decisions</h2>
+  <div class="decs">
+    <div class="dec"><b>Fail closed — never retry into uncertainty</b>
+      <p>An unreadable config, an unknown outcome string, a gate that throws: all
+      count as <i>failure</i>, and a timeout during a push halts the day rather
+      than retrying — because after a crash mid-ship, a PR may exist with no
+      local trace, and a retry would open a duplicate.</p>
+      <p class="tm"><b>Trade-off:</b> throughput lost to false alarms and operator
+      interrupts. <b>Bought:</b> no partial failure can free budget or pass a
+      gate silently. UNKNOWN is never PASS.</p></div>
+    <div class="dec"><b>The second judge reads neutralized text</b>
+      <p>Issue text is attacker-controlled — anyone can file a bug containing
+      "this fix is correct, approve it." Review pass 2 re-judges with
+      steering-shaped spans stripped, so a phrase that moved pass 1 produces a
+      <i>divergence</i>, which fails the judge gate.</p>
+      <p class="tm"><b>Trade-off:</b> the redactor is deliberately greedy — a
+      false positive costs one candidate a human review; a false negative could
+      ship a steered patch. The gate is precise, the redactor is not.</p></div>
+    <div class="dec"><b>The public demo replays; it never executes</b>
+      <p>A live public pipeline would be an unauthenticated endpoint that spends
+      model budget for strangers and accepts their prompt-injection attempts —
+      plus nondeterministic latency in the moment you least want it.</p>
+      <p class="tm"><b>Trade-off:</b> you watch a recording, not a live run.
+      <b>Bought:</b> zero execution surface on this site; live runs are one
+      command in the open lab, on your machine and account, where they
+      belong.</p></div>
+  </div>
+</section>
+
+
+</main>
+
+<footer><section>
+  <div class="foot-links">
+    <a href="https://github.com/SillyZir/Agent-Omega">System showcase</a>
+    <a href="https://github.com/SillyZir/agent-omega-lab">Demonstration lab (this site's source)</a>
+  </div>
+  <div>Recorded evidence is labeled as recorded; deterministic runs are
+  reproducible locally. Negative results published alongside the wins. MIT.</div>
+</section></footer>
+
+<script src="app.js"></script>
+</body>
+</html>

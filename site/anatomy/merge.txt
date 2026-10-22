@@ -1,0 +1,13 @@
+# Daily monitor rows (verbatim from the published daily summaries) and the
+# public PR timeline. The merge is an EXTERNAL HUMAN action — the project's
+# maintainer, 24 days after the PR opened; Omega only read the state daily.
+
+# cloud/summaries/2026-09-02.md
+| esengine/DeepSeek-Reasonix PR 9707 | OPEN | — | 2026-09-01 |
+
+[… 20 daily monitor cycles …]
+
+# cloud/summaries/2026-09-26.md
+| esengine/DeepSeek-Reasonix PR 9707 | MERGED | — | 2026-09-25 |
+
+github.com: PR opened 2026-09-01T13:53Z · merged by the maintainer 2026-09-25T09:16Z

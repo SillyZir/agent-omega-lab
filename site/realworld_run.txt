@@ -1,0 +1,17 @@
+# LIVE localization session captured 2026-10-21 from a clean-environment copy of
+# the lab (tools in realworld/reproduce.py; one billed model session). Live runs
+# are nondeterministic — yours may differ. Ground truth: the maintainers' merged
+# fix, linked below the pane.
+
+From https://github.com/ethereum/go-ethereum
+ * branch            d4027f3d4654b374b0962946b03d6f12e3b269ee -> FETCH_HEAD
+fetching ethereum/go-ethereum at the fix commit (blob-minimized)…
+checking out the PARENT of the human fix (the pre-fix tree)…
+
+LIVE localization session on ethereum/go-ethereum#34692: 'node: HTTP vhost validation rejects mixed-case Host headers'
+
+predicted (9.6s): ['node/rpcstack.go']   error: (none)
+human fix touched:  ['node/rpcstack.go', 'node/rpcstack_test.go']
+top-1 match: True   top-3 match: True   (primary source file: node/rpcstack.go)
+
+verify the ground truth yourself: https://github.com/ethereum/go-ethereum/commit/d4027f3d4654b374b0962946b03d6f12e3b269ee

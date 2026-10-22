@@ -1,0 +1,8 @@
+# The scout's ranking row for this issue, 2026-09-01 daily report (verbatim,
+# wrapped for width; published in the showcase execution log)
+
+| 5 | esengine/DeepSeek-Reasonix issue 9516 | 0.87 | yes | repro evidence in
+body (steps/code block/trace); bug-class label (bug); well-scoped: single
+apparent subsystem, bounded description; active in the last 30 days; healthy
+discussion (5 comments); responsive repo (score 0.69); clean timeline
+(duplicate check: proceed, confidence 0.2) |

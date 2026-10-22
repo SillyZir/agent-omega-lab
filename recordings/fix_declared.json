@@ -1,0 +1,9 @@
+{
+ "done": true,
+ "files": [
+  "cache.go"
+ ],
+ "summary": "Fixed evict() in cache.go to remove order[0] (the least-recently-used key) instead of the last element (the most-recently-used key).",
+ "duration_s": 22.0,
+ "captured": "2026-10-21"
+}

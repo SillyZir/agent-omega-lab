@@ -1,0 +1,65 @@
+{
+ "note": "Verify any file with: shasum -a 256 <file>. Byte-identical entries match the production module published in the Agent-Omega showcase repo.",
+ "files": [
+  {
+   "file": "agent/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/__init__.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/agentic_session.py",
+   "sha256": "21e1c6b7a11fc1919800175a3e6801dd81cbf751343d927528f3bc3d555ea741",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/agentic_session.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/judge.py",
+   "sha256": "e81d253849524c98e79a035549372f4718237135b50ec4af2aadc2971eec48b6",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/judge.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/autoship_gates.py",
+   "sha256": "f926d20b3a90c5aaad5f4944ea4756ca29a9751649d51fa8d939d42251985fe2",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/autoship_gates.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/test_generation.py",
+   "sha256": "f34befa900c9c1e7528610b75347bcb68750ef6cbabf2d3f44c475ceed7dc5e9",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/test_generation.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/test_exec.py",
+   "sha256": "81bfe837dcd7c4a6661b1bf062b1cb4d40fed1d1ec164187113c264f572470bf",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/test_exec.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "agent/regression_harness.py",
+   "sha256": "e10a491649dfebe84aec5899e1e97f294a32a913ff5f97611bc90392921c1b21",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/agent/regression_harness.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "cloud/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/cloud/__init__.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "cloud/repo_health.py",
+   "sha256": "335e00f8f30e93bbd7269722edebc28e3511103fd717850177d3f40ce5e4eb38",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/cloud/repo_health.py",
+   "vendored": "byte-identical"
+  },
+  {
+   "file": "runner/env_guard.py",
+   "sha256": "f0ca1378d8aeb9f4b3e297c60f7b97e9e9eefe8b386b1ef5544896754fd10989",
+   "source": "https://github.com/SillyZir/Agent-Omega/blob/main/runner/env_guard.py",
+   "vendored": "DEMO SHIM \u2014 deliberately substituted; see file docstring"
+  }
+ ]
+}

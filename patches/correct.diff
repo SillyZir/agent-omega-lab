@@ -1,0 +1,15 @@
+diff --git a/cache.go b/cache.go
+index d4ad4f7..80f2426 100644
+--- a/cache.go
++++ b/cache.go
+@@ -58,8 +58,7 @@ func (c *Cache) evict() {
+ 	if len(c.order) == 0 {
+ 		return
+ 	}
+-	last := len(c.order) - 1
+-	victim := c.order[last]
+-	c.order = c.order[:last]
++	victim := c.order[0]
++	c.order = c.order[1:]
+ 	delete(c.data, victim)
+ }

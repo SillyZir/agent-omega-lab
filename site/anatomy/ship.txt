@@ -1,0 +1,11 @@
+# The ship record and the executor's close-out (verbatim, published in the
+# showcase execution log)
+
+"ship": {
+  "status": "shipped",
+  "pr_url": "https://github.com/esengine/DeepSeek-Reasonix/pull/9707",
+  "branch": "auto-fix/9516"
+},
+"outcome": "shipped"
+
+[2026-09-01T09:53:18-04:00] executor cycle complete: 1 shipped, 9 candidate(s) considered, aborted=False — OPERATOR FLAGS: auto-shipped

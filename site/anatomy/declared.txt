@@ -1,0 +1,11 @@
+# The fix session's structured declaration (verbatim from the recorded
+# pipeline bundle, published in the showcase execution log)
+
+"declared": {
+  "done": true,
+  "files": ["internal/capability/catalog.go"],
+  "summary": "Merge live proxy-observed MCP tools into the capability catalog
+   even when the server has (possibly stale, session-pinned) registry entries,
+   suppressing only per-tool duplicates, so tools the live server exposes are
+   always discoverable via use_capability list/search/inspect."
+}

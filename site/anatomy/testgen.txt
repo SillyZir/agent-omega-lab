@@ -1,0 +1,21 @@
+# Regression-test generation record (verbatim from the recorded bundle,
+# published in the showcase execution log)
+
+"outcome": "generated",
+"test_file": "internal/agent/usecapability_live_catalog_test.go",
+"names": ["TestCatalogSurfacesLiveServerToolMissingFromRegistrySnapshot"],
+
+on the UNPATCHED tree (must fail):
+--- FAIL: TestCatalogSurfacesLiveServerToolMissingFromRegistrySnapshot (0.01s)
+    usecapability_live_catalog_test.go:110: inspect of a tool the live
+    connected server exposes must succeed, got: unknown capability_id
+    "mcp-tool:bfexplorer/execute_console_script"
+FAIL
+
+on the PATCHED tree (must pass):
+ok  	reasonix/internal/agent	0.272s
+
+independent validity judge: "valid" — "The test drives the user-facing
+use_capability frontend against a live MCP server whose tool is missing from
+the stale registry snapshot, and it fails with exactly the reported observable
+symptom … which is the behavioral contract the issue describes."

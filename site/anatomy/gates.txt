@@ -1,0 +1,19 @@
+# All 15 gate verdicts (content verbatim from the recorded bundle's JSON,
+# reformatted gate/ok/reason into rows; published in the showcase log).
+# The 16th gate, repo_path_fence, was added to the system after this run.
+
+  PASS  breaker_armed            armed
+  PASS  daily_cap                0/2 used (own in-flight intent excluded)
+  PASS  concentration            remaining 1: restricted: limit 1 open PRs (executor.repo_policy caps this repo at 1); 0 open now (monitor state + ledger, incl. ships from today)
+  PASS  repo_autoship_allowed    per-repo policy permits auto-ship
+  PASS  repo_required_labels     no per-repo label requirements
+  PASS  scope_single_subsystem   single package: internal/capability
+  PASS  judge_correct_twice      correct twice (pass 2 = re-sample on final artifact)
+  PASS  tests_pass               affected-package tests pass
+  PASS  validated_languages      every changed source file is go (the language executed)
+  PASS  testgen_generated        verified regression test generated
+  PASS  no_material_caveats      no hedges detected
+  PASS  content_lint             clean
+  PASS  injection_lint           clean
+  PASS  size_caps                2 files, 131 lines, 3 hunks
+  PASS  changelog_lint           clean

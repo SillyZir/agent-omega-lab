@@ -1,0 +1,12 @@
+{
+ "issue_key": "ethereum/go-ethereum#34692",
+ "repo": "ethereum/go-ethereum",
+ "number": 34692,
+ "title": "node: HTTP vhost validation rejects mixed-case Host headers",
+ "body": "#### System information\n\nCL client & version: N/A\nOS & Version: macOS 26.4 (`Darwin 25.4.0 arm64`)\nCommit hash : `58557cb4635d4e6f3e49fcdc82a6469554e929a6`\n\n#### Expected behaviour\n\nHTTP virtual host validation should treat hostnames case-insensitively.\n\nIf `test` is present in the configured vhost allowlist, requests with `Host: test`,\n`Host: TEST`, or `Host: TeSt:1234` should all be accepted.\n\n#### Actual behaviour\n\nThe configured vhost allowlist is normalized to lowercase, but the incoming HTTP\n`Host` header is compared without lowercasing it first.\n\nAs a result, a request with a mixed-case hostname such as `Host: TeSt:1234` is\nrejected with:\n\n```text\nHTTP/1.1 403 Forbidden\ninvalid host specified\n```\n\nThis is a user-facing RPC issue because hostname matching is expected to be\ncase-insensitive.\n\n#### Steps to reproduce the behaviour\n\n1. Start geth with HTTP RPC enabled and a lowercase vhost allowlist entry, for example:\n\n```sh\ngeth --http --http.addr 127.0.0.1 --http.port 8545 --http.api web3 --http.vhosts test\n```\n\n2. Send a JSON-RPC request with a mixed-case `Host` header:\n\n```sh\ncurl -i \\\n  -H 'Host: TeSt:1234' \\\n  -H 'Content-Type: application/json' \\\n  --data '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"web3_clientVersion\",\"params\":[]}' \\\n  http://127.0.0.1:8545\n```\n\n3. Observe that the request is rejected with `403 Forbidden`.\n\n4. Repeat the same request with `Host: test` and observe that it succeeds.\n\n#### Backtrace\n\n````\nNo panic/backtrace. The issue is a clean but incorrect HTTP 403 response from\nthe vhost validation path.\n````",
+ "fix_sha": "d4027f3d4654b374b0962946b03d6f12e3b269ee",
+ "fix_files": [
+  "node/rpcstack.go",
+  "node/rpcstack_test.go"
+ ]
+}
