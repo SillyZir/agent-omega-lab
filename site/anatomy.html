@@ -24,6 +24,10 @@
   .step h3 { margin:0 0 6px; font-size:16.5px; }
   .step p { margin:0 0 10px; color:var(--dim); font-size:14px; max-width:640px; }
   .step .console { max-height:340px; }
+  .intro { text-align:center; }
+  .intro .kicker { justify-content:center; }
+  .intro .kicker::after { display:none; }
+  .intro .cap { margin-left:auto; margin-right:auto; }
   @media (max-width:760px){ .step { grid-template-columns:1fr; gap:6px; }
     .when { text-align:left; } }
 </style>
@@ -41,7 +45,7 @@
 </div></header>
 
 <main>
-<section style="padding-bottom:10px">
+<section class="intro" style="padding-bottom:10px">
   <div class="kicker">Anatomy of one autonomous fix</div>
   <h1>A bug report went in.<br>A merged fix came out.<br>
       <span class="hl">No human touched the middle.</span></h1>
