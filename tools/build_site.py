@@ -111,9 +111,14 @@ def main():
 
     # fail/pass panels for the demo card, from the recorded testgen differential
     tg = json.load(open(os.path.join(LAB, "recordings", "testgen_outcome.json")))
+    # keep the two lines that carry the point; full output stays verbatim in
+    # the unabridged pipeline log — truncation is marked, never silent
+    fail_lines = [l for l in tg["base_output"].strip().splitlines()
+                  if l.strip().startswith("--- FAIL") or "evict_lru_test" in l]
     open(os.path.join(EV, "panel_fail.txt"), "w").write(
         "$ go test ./...   # buggy tree + generated regression test\n\n"
-        + tg["base_output"].strip() + "\n")
+        + "\n".join(fail_lines)
+        + "\nFAIL\n[… full output in the unabridged pipeline log …]\n")
     open(os.path.join(EV, "panel_pass.txt"), "w").write(
         "$ go test ./...   # patched tree, same test\n\n"
         + tg["patched_output"].strip() + "\n")
