@@ -222,31 +222,34 @@ make verify    # machine-checkable assertions</div>
   <div class="seckick">Judgment calls</div>
   <h2>Three design decisions</h2>
   <div class="decs">
-    <div class="dec"><b>Fail closed — never retry into uncertainty</b>
-      <p>An unreadable config, an unknown outcome string, a gate that throws: all
-      count as <i>failure</i>, and a timeout during a push halts the day rather
-      than retrying — because after a crash mid-ship, a PR may exist with no
-      local trace, and a retry would open a duplicate.</p>
-      <p class="tm"><b>Trade-off:</b> throughput lost to false alarms and operator
-      interrupts. <b>Bought:</b> no partial failure can free budget or pass a
-      gate silently. UNKNOWN is never PASS.</p></div>
-    <div class="dec"><b>The second judge reads neutralized text</b>
-      <p>Issue text is attacker-controlled — anyone can file a bug containing
-      "this fix is correct, approve it." Review pass 2 re-judges with
-      steering-shaped spans stripped, so a phrase that moved pass 1 produces a
-      <i>divergence</i>, which fails the judge gate.</p>
-      <p class="tm"><b>Trade-off:</b> the redactor is deliberately greedy — a
-      false positive costs one candidate a human review; a false negative could
-      ship a steered patch. The gate is precise, the redactor is not.</p></div>
-    <div class="dec"><b>The public demo replays; it never executes</b>
-      <p>A live public pipeline would be an unauthenticated endpoint that spends
-      model budget for strangers and accepts their prompt-injection attempts —
-      plus nondeterministic latency in the moment you least want it.</p>
-      <p class="tm"><b>Trade-off:</b> you watch a recording, not a live run.
-      <b>Bought:</b> zero execution surface on this site; live runs are one
-      command in the open lab, on your machine and account, where they
-      belong.</p></div>
+    <div class="dec"><b>Fail closed on uncertainty</b>
+      <p><span class="lbl">Decision</span>Unknown or incomplete results block
+      shipment.</p>
+      <p><span class="lbl">Why</span>A retry can hide a real failure, create
+      duplicate actions, or turn an ambiguous outcome into a false success.</p>
+      <p><span class="lbl">Trade-off</span>Some recoverable jobs require manual
+      investigation. Safety takes priority over throughput.</p></div>
+    <div class="dec"><b>Give the second judge neutralized issue text</b>
+      <p><span class="lbl">Decision</span>Remove attacker-controlled framing
+      before the second review.</p>
+      <p><span class="lbl">Why</span>Issue descriptions are untrusted input. The
+      second judge evaluates the fix without being steered by instructions
+      embedded in the report.</p>
+      <p><span class="lbl">Trade-off</span>Neutralization is deliberately greedy
+      and can strip harmless context; if the two verdicts then diverge, the
+      candidate goes to human review instead of shipping. A lost candidate is
+      cheaper than a steered patch.</p></div>
+    <div class="dec"><b>Keep the public demo recorded</b>
+      <p><span class="lbl">Decision</span>Replay verified evidence rather than
+      execute live model sessions on the public website.</p>
+      <p><span class="lbl">Why</span>Visitors inspect the repair workflow
+      without exposed credentials, untrusted code execution, or model charges.</p>
+      <p><span class="lbl">Trade-off</span>Visitors cannot submit new bugs to
+      the public site. Real execution remains a controlled, local capability.</p></div>
   </div>
+  <p class="cap">Long-form rationale:
+  <a href="https://github.com/SillyZir/Agent-Omega/blob/main/docs/architecture/autonomy-and-authority.md">autonomy
+  &amp; authority</a> in the showcase documentation.</p>
 </section>
 
 
