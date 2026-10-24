@@ -45,7 +45,8 @@ header.nav .wrapm { display:flex; align-items:center; gap:22px; min-height:54px;
 header.nav .wrapm::-webkit-scrollbar { display:none; }
 .brand { font-weight:750; color:var(--fg); font-size:15.5px; letter-spacing:-.01em; }
 .brand .om { color:var(--green); font-family:Georgia,'Times New Roman',serif; }
-header.nav a.nl { color:var(--dim); font-size:13.5px; font-weight:500; }
+header.nav a.nl { color:var(--dim); font-size:13.5px; font-weight:500;
+                  white-space:nowrap; }
 header.nav a.nl:hover { color:var(--fg); text-decoration:none; }
 .btn { display:inline-flex; align-items:center; gap:8px; padding:9px 18px;
        border-radius:var(--r1); font-size:14px; font-weight:600;
