@@ -42,90 +42,30 @@
     maintainers of projects including Caddy, rclone, go-ethereum, and k3s.
     In one documented case, the complete repair-to-merge workflow ran without
     human intervention.</div>
-    <p class="rise d3" style="margin-top:30px; text-align:center">
+    <p class="rise d3" style="margin-top:30px">
       <a class="btn primary" href="#demo">Explore the demo ↓</a>
       <a class="btn blue" href="#prs">Merged PRs ↓</a></p>
   </div>
-  <div class="herodetails rise d2" id="details">
-    <div class="seckick">Under the hood</div>
-    <h2 style="font-size:18px">Full technical details</h2>
-  <details class="acc"><summary>Pipeline architecture</summary><div class="inner">
-    <ul>
-      <li><b>Localize</b> — a read-only model session names the faulty files from the issue text alone <i>(88–93% top-1 on 37 ground-truth issues; keyword baseline 11%)</i>.</li>
-      <li><b>Patch</b> — a bounded session (file tools, no shell) edits the checkout; only the diff is kept.</li>
-      <li><b>Regression test</b> — a fix-blind session writes a test that must FAIL on base and PASS on patch, twice, stably.</li>
-      <li><b>Judge ×2</b> — independent review passes; the second reads <i>neutralized</i> issue text so steering produces a divergence.</li>
-      <li><b>16 release gates</b> — budgets, capacity, policy, scope, lints, breaker; a gate that errors fails closed.</li>
-    </ul>
-  </div></details>
-  <details class="acc" id="comparison"><summary>Correct fix vs wrong fix, side by side</summary><div class="inner cmp">
-    <div class="grid2">
-      <div class="good"><h3>The model's fix → shipped</h3>
-        <div class="console" data-fill="evidence/proof_good.txt">loading…</div></div>
-      <div class="bad"><h3>A plausible wrong fix → blocked</h3>
-        <div class="console" data-fill="evidence/proof_bad.txt">loading…</div></div>
-    </div>
-  </div></details>
-  <details class="acc"><summary>Full pipeline log (unabridged)</summary><div class="inner">
-    <div class="console" data-fill="evidence/demo_all.txt">loading…</div>
-  </div></details>
-  <details class="acc"><summary>Verification suite</summary><div class="inner">
-    <div class="console" data-fill="evidence/verify.txt">loading…</div>
-  </div></details>
-  <details class="acc"><summary>Real-world reproduction: go-ethereum #34692</summary><div class="inner">
-    <p class="cap">The seeded demo bug is synthetic by design. The same localization
-    session, pointed at go-ethereum before the maintainers fixed
-    <a href="https://github.com/ethereum/go-ethereum/issues/34692">issue #34692</a>,
-    named <code>node/rpcstack.go</code> top-1 in 9.6 s — matching
-    <a href="https://github.com/ethereum/go-ethereum/commit/d4027f3d4654b374b0962946b03d6f12e3b269ee">the merged fix</a>.
-    One benchmark data point; localization only; live runs vary.</p>
-    <div class="console" data-fill="evidence/realworld_run.txt" style="max-height:240px">loading…</div>
-  </div></details>
-  <details class="acc"><summary>Numbers &amp; limitations</summary><div class="inner">
-    <ul>
-      <li><b>Localization:</b> 88–93% top-1 (100% top-3) on 37 issues with merged human fixes.</li>
-      <li><b>Fixes:</b> validated against merged human fixes pre-launch; 4/5 decisive runs passed the maintainers' own tests.</li>
-      <li><b>Honest negatives:</b> a Rust expansion closed NO-PROMOTE on pre-registered bars, twice; one PR withdrawn as a design finding.</li>
-      <li>The seeded demo bug is easier than production work; recorded output is recorded; live sessions vary.</li>
-      <li>A merged PR proves a change passed one repository's review — nothing more universal.</li>
-      <li>Reproduction tested on macOS/arm64 (go 1.25, python 3.14); Linux expected, unverified.</li>
-    </ul>
-  </div></details>
-  <details class="acc"><summary>Security model &amp; failure injection</summary><div class="inner">
-    <p class="cap"><b>Reasoning does not confer authority.</b> Model and external text
-    are untrusted inputs to a deterministic control plane. Six injected failures, six
-    blocks (the demo's third tab, or <code>make inject</code>):</p>
-    <ul>
-      <li>Plausible-but-wrong patch → tests catch it; <code>tests_pass</code> refuses.</li>
-      <li>Prompt-injection in the issue text → <code>injection_lint</code> refuses.</li>
-      <li>Diff touching CI config → <code>content_lint</code> refuses.</li>
-      <li>Oversized 40-file diff → <code>size_caps</code> refuses.</li>
-      <li>Tripped circuit breaker → <code>breaker_armed</code> refuses.</li>
-      <li>Missing state file → the gate <b>errors and fails closed</b>.</li>
-    </ul>
-    <p class="cap">This site is static files only — no backend, no analytics, no
-    cookies; nothing here can execute code or spend a model budget.</p>
-  </div></details>
-  <details class="acc"><summary>Reproduce it &amp; raw artifacts</summary><div class="inner">
-    <div class="console" style="max-height:none; overflow:visible">git clone https://github.com/SillyZir/agent-omega-lab
-cd agent-omega-lab
-make demo      # full pipeline, ~1 min, no API key needed
-make inject    # six blocked-failure scenarios
-make verify    # machine-checkable assertions</div>
-    <p class="cap"><code>MANIFEST.json</code> proves by sha256 that the modules doing
-    the work are byte-identical to the
-    <a href="https://github.com/SillyZir/Agent-Omega">published production code</a>;
-    <a href="https://github.com/SillyZir/agent-omega-lab">tools/record.py</a>
-    regenerates every recording under your own account.
-    Artifacts: <a href="evidence/fix.diff">the model's patch</a> ·
-    <a href="evidence/evict_lru_test.go">generated regression test</a> ·
-    <a href="evidence/wrong.diff">the wrong patch</a> ·
-    <a href="evidence/judge_recorded.json">judge verdicts (fix)</a> ·
-    <a href="evidence/judge_wrong.json">judge verdicts (wrong patch)</a> ·
-    <a href="evidence/testgen_outcome.json">regression-test record</a> ·
-    <a href="evidence/ISSUE.md">the seeded issue</a> ·
-    <a href="evidence/live_run.log">recording transcript</a></p>
-  </div></details>
+  <div class="trace rise d2" role="img" aria-label="Replay of the one fully
+       autonomous production run: discover, investigate, fix, verify, submit —
+       every stage completed, and the maintainer merged pull request 9707.">
+    <div class="tracehead"><span class="dot" aria-hidden="true"></span>
+      one production run — replayed
+      <span class="mode">esengine/DeepSeek-Reasonix · 2026-09-01</span></div>
+    <ol class="tstages">
+      <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Discover</b>
+        <code class="tsnip">scout: issue 9516 scored 0.87 — repro evidence in body, bug-class label</code></div></li>
+      <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Investigate</b>
+        <code class="tsnip">declared: internal/capability/catalog.go — a stale entry suppressed the entire live proxy tool directory</code></div></li>
+      <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Fix</b>
+        <code class="tsnip">patch: suppresses per-tool duplicates, never the whole live directory</code></div></li>
+      <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Verify</b>
+        <code class="tsnip">test: FAIL on the unpatched tree → PASS on patch · judge ×2 correct · 15 gates PASS</code></div></li>
+      <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Submit</b>
+        <code class="tsnip">PR #9707 opened 09:53 · merged by the maintainer Sept 25</code></div></li>
+    </ol>
+    <div class="tfoot">18 minutes, no human in the loop —
+      <a href="anatomy.html">read the full anatomy →</a></div>
   </div>
 </section>
 </div>
@@ -251,6 +191,88 @@ make verify    # machine-checkable assertions</div>
   <p class="cap">Long-form rationale:
   <a href="https://github.com/SillyZir/Agent-Omega/blob/main/docs/architecture/autonomy-and-authority.md">autonomy
   &amp; authority</a> in the showcase documentation.</p>
+</section>
+
+<section id="details" style="padding-top:14px">
+  <div class="seckick">Under the hood</div>
+  <h2>Full technical details</h2>
+  <details class="acc"><summary>Pipeline architecture</summary><div class="inner">
+    <ul>
+      <li><b>Localize</b> — a read-only model session names the faulty files from the issue text alone <i>(88–93% top-1 on 37 ground-truth issues; keyword baseline 11%)</i>.</li>
+      <li><b>Patch</b> — a bounded session (file tools, no shell) edits the checkout; only the diff is kept.</li>
+      <li><b>Regression test</b> — a fix-blind session writes a test that must FAIL on base and PASS on patch, twice, stably.</li>
+      <li><b>Judge ×2</b> — independent review passes; the second reads <i>neutralized</i> issue text so steering produces a divergence.</li>
+      <li><b>16 release gates</b> — budgets, capacity, policy, scope, lints, breaker; a gate that errors fails closed.</li>
+    </ul>
+  </div></details>
+  <details class="acc" id="comparison"><summary>Correct fix vs wrong fix, side by side</summary><div class="inner cmp">
+    <div class="grid2">
+      <div class="good"><h3>The model's fix → shipped</h3>
+        <div class="console" data-fill="evidence/proof_good.txt">loading…</div></div>
+      <div class="bad"><h3>A plausible wrong fix → blocked</h3>
+        <div class="console" data-fill="evidence/proof_bad.txt">loading…</div></div>
+    </div>
+  </div></details>
+  <details class="acc"><summary>Full pipeline log (unabridged)</summary><div class="inner">
+    <div class="console" data-fill="evidence/demo_all.txt">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Verification suite</summary><div class="inner">
+    <div class="console" data-fill="evidence/verify.txt">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Real-world reproduction: go-ethereum #34692</summary><div class="inner">
+    <p class="cap">The seeded demo bug is synthetic by design. The same localization
+    session, pointed at go-ethereum before the maintainers fixed
+    <a href="https://github.com/ethereum/go-ethereum/issues/34692">issue #34692</a>,
+    named <code>node/rpcstack.go</code> top-1 in 9.6 s — matching
+    <a href="https://github.com/ethereum/go-ethereum/commit/d4027f3d4654b374b0962946b03d6f12e3b269ee">the merged fix</a>.
+    One benchmark data point; localization only; live runs vary.</p>
+    <div class="console" data-fill="evidence/realworld_run.txt" style="max-height:240px">loading…</div>
+  </div></details>
+  <details class="acc"><summary>Numbers &amp; limitations</summary><div class="inner">
+    <ul>
+      <li><b>Localization:</b> 88–93% top-1 (100% top-3) on 37 issues with merged human fixes.</li>
+      <li><b>Fixes:</b> validated against merged human fixes pre-launch; 4/5 decisive runs passed the maintainers' own tests.</li>
+      <li><b>Honest negatives:</b> a Rust expansion closed NO-PROMOTE on pre-registered bars, twice; one PR withdrawn as a design finding.</li>
+      <li>The seeded demo bug is easier than production work; recorded output is recorded; live sessions vary.</li>
+      <li>A merged PR proves a change passed one repository's review — nothing more universal.</li>
+      <li>Reproduction tested on macOS/arm64 (go 1.25, python 3.14); Linux expected, unverified.</li>
+    </ul>
+  </div></details>
+  <details class="acc"><summary>Security model &amp; failure injection</summary><div class="inner">
+    <p class="cap"><b>Reasoning does not confer authority.</b> Model and external text
+    are untrusted inputs to a deterministic control plane. Six injected failures, six
+    blocks (the demo's third tab, or <code>make inject</code>):</p>
+    <ul>
+      <li>Plausible-but-wrong patch → tests catch it; <code>tests_pass</code> refuses.</li>
+      <li>Prompt-injection in the issue text → <code>injection_lint</code> refuses.</li>
+      <li>Diff touching CI config → <code>content_lint</code> refuses.</li>
+      <li>Oversized 40-file diff → <code>size_caps</code> refuses.</li>
+      <li>Tripped circuit breaker → <code>breaker_armed</code> refuses.</li>
+      <li>Missing state file → the gate <b>errors and fails closed</b>.</li>
+    </ul>
+    <p class="cap">This site is static files only — no backend, no analytics, no
+    cookies; nothing here can execute code or spend a model budget.</p>
+  </div></details>
+  <details class="acc"><summary>Reproduce it &amp; raw artifacts</summary><div class="inner">
+    <div class="console" style="max-height:none; overflow:visible">git clone https://github.com/SillyZir/agent-omega-lab
+cd agent-omega-lab
+make demo      # full pipeline, ~1 min, no API key needed
+make inject    # six blocked-failure scenarios
+make verify    # machine-checkable assertions</div>
+    <p class="cap"><code>MANIFEST.json</code> proves by sha256 that the modules doing
+    the work are byte-identical to the
+    <a href="https://github.com/SillyZir/Agent-Omega">published production code</a>;
+    <a href="https://github.com/SillyZir/agent-omega-lab">tools/record.py</a>
+    regenerates every recording under your own account.
+    Artifacts: <a href="evidence/fix.diff">the model's patch</a> ·
+    <a href="evidence/evict_lru_test.go">generated regression test</a> ·
+    <a href="evidence/wrong.diff">the wrong patch</a> ·
+    <a href="evidence/judge_recorded.json">judge verdicts (fix)</a> ·
+    <a href="evidence/judge_wrong.json">judge verdicts (wrong patch)</a> ·
+    <a href="evidence/testgen_outcome.json">regression-test record</a> ·
+    <a href="evidence/ISSUE.md">the seeded issue</a> ·
+    <a href="evidence/live_run.log">recording transcript</a></p>
+  </div></details>
 </section>
 
 

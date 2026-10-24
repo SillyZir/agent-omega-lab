@@ -214,13 +214,51 @@ footer { border-top:1px solid var(--line); margin-top:24px; background:var(--s1)
 footer section { padding:26px 24px; font-size:13px; color:var(--faint); }
 .foot-links { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:10px; }
 
-/* hero-embedded technical details */
-.herodetails { min-width:0; }
-.herodetails details.acc { margin:8px 0; }
-.herodetails details.acc summary { font-size:13px; padding:10px 14px; }
-.herodetails .inner { padding:10px 14px 14px; }
-.herodetails .grid2 { grid-template-columns:1fr; }
-.herodetails .console { max-height:300px; font-size:11.5px; }
+/* hero pipeline trace — replays the one autonomous production run.
+   Base state (no JS, reduced motion) is the completed trace; the sequencer
+   adds .anim and drives .pending/.active/.done per stage. */
+.trace { background:var(--s1); border:1px solid var(--line2); border-radius:var(--r3);
+         overflow:hidden; box-shadow:0 24px 60px -32px #000, 0 0 0 1px #ffffff06 inset; }
+.tracehead { display:flex; align-items:center; gap:10px; padding:13px 18px;
+             border-bottom:1px solid var(--line); font-size:13.5px; font-weight:650;
+             background:var(--s2); flex-wrap:wrap; }
+.tracehead .mode { color:var(--faint); font-weight:450; font-size:12px; margin-left:auto; }
+.tstages { list-style:none; margin:0; padding:18px 18px 8px; }
+.tstage { position:relative; padding:0 0 18px 36px; margin:0; }
+.tstage::before { content:""; position:absolute; left:10px; top:24px; bottom:-2px;
+                  width:2px; background:var(--line); }
+.tstage::after { content:""; position:absolute; left:10px; top:24px; bottom:-2px;
+                 width:2px; background:var(--green2);
+                 transform:scaleY(1); transform-origin:top; }
+.tstage:last-child::before, .tstage:last-child::after { display:none; }
+.tg { position:absolute; left:0; top:2px; width:22px; height:22px; border-radius:50%;
+      display:grid; place-items:center; font:700 11px/1 var(--mono);
+      background:#3fd68f1a; border:1px solid #3fd68f55; color:var(--green); }
+.tg::before { content:"✓"; }
+.tbody { min-width:0; }
+.tbody b { display:block; font-size:13.5px; letter-spacing:-.01em; }
+.tsnip { display:block; font-size:11.5px; color:var(--dim); line-height:1.5;
+         margin-top:2px; overflow-wrap:break-word; }
+.tfoot { border-top:1px solid var(--line); padding:12px 18px; font-size:12.5px;
+         color:var(--dim); background:var(--s2); }
+@media (prefers-reduced-motion: no-preference) {
+  .trace.anim .tg, .trace.anim .tsnip, .trace.anim .tbody b,
+  .trace.anim .tstage::after { transition:opacity .35s ease, transform .4s ease,
+      background .35s ease, border-color .35s ease, color .35s ease; }
+  .trace.anim .tstage.pending .tg { background:var(--s2); border-color:var(--line2);
+      color:transparent; }
+  .trace.anim .tstage.pending .tsnip { opacity:.3; }
+  .trace.anim .tstage.pending .tbody b { opacity:.45; }
+  .trace.anim .tstage.pending::after, .trace.anim .tstage.active::after {
+      transform:scaleY(0); }
+  .trace.anim .tstage.active .tg { background:#6cb6ff1a; border-color:var(--blue);
+      color:var(--blue); animation:tracepulse 1s ease infinite; }
+  .trace.anim .tstage.active .tg::before { content:"●"; font-size:8px; }
+  .trace.anim .tstage.active .tsnip { opacity:1; color:var(--fg); }
+  @keyframes tracepulse {
+    0%,100% { box-shadow:0 0 0 0 #6cb6ff33; } 50% { box-shadow:0 0 0 5px #6cb6ff18; }
+  }
+}
 
 @media (max-width: 860px) {
   section { padding:36px 18px; }

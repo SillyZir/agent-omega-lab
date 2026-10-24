@@ -68,6 +68,46 @@ function handleHash(showView) {
     if (d) { d.open = true; d.querySelectorAll('[data-fill]').forEach(fill);
              d.scrollIntoView({block: 'center'}); } }
 }
+/* Hero trace sequencer. The markup's base state is the completed run (what
+   no-JS and reduced-motion users see); this replays it: each stage goes
+   pending -> active -> done, holds the finished trace, then loops. Paused
+   when the tab is hidden or the trace is scrolled off-screen. */
+function wireTrace() {
+  const trace = document.querySelector('.trace');
+  if (!trace || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const stages = [...trace.querySelectorAll('.tstage')];
+  if (!stages.length) return;
+  let timer = null, step = 0, onscreen = true;
+  function render() {
+    stages.forEach((s, i) => {
+      s.classList.toggle('done', i < step);
+      s.classList.toggle('active', i === step);
+      s.classList.toggle('pending', i > step);
+    });
+  }
+  function tick() {
+    render();
+    const hold = step === stages.length ? 3200 : 1000;
+    step = (step + 1) % (stages.length + 1);
+    timer = setTimeout(tick, hold);
+  }
+  function start() {
+    if (timer !== null || document.hidden || !onscreen) return;
+    trace.classList.add('anim');
+    step = 0;
+    timer = setTimeout(tick, 700);
+  }
+  function stop() { clearTimeout(timer); timer = null; }
+  document.addEventListener('visibilitychange',
+    () => document.hidden ? stop() : start());
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => {
+      onscreen = es[0].isIntersecting;
+      onscreen ? start() : stop();
+    }, {threshold: .25}).observe(trace);
+  }
+  start();
+}
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-eager][data-fill]').forEach(fill);
   const showView = wireScenarios();
@@ -77,4 +117,5 @@ document.addEventListener('DOMContentLoaded', () => {
     d.addEventListener('toggle', () => {
       if (d.open) d.querySelectorAll('[data-fill]').forEach(fill);
     }));
+  wireTrace();
 });
