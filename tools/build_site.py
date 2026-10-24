@@ -177,6 +177,38 @@ def main():
     if captured not in idx_src:
         sys.exit(f"build aborted: index.html does not mention the recording "
                  f"capture date {captured!r} — page claim has drifted")
+
+    # trace gate: each hero-trace snippet claim must appear (case-insensitive)
+    # both on the page and verbatim in the artifact it summarizes, so the
+    # animation can never drift from the evidence
+    trace_pins = {
+        "0.87": "scout_row.txt",
+        "repro evidence": "scout_row.txt",
+        "internal/capability/catalog.go": "declared.txt",
+        "suppressed the entire live": "judges.txt",
+        "never the whole live directory": "fix.diff",
+        "unpatched tree": "testgen.txt",
+        "9707": "ship.txt",
+        "merged by the maintainer": "merge.txt",
+    }
+    squash = lambda s: re.sub(r"\s+", " ", s.lower())
+    idx_lc = squash(idx_src)
+    for pin, art in trace_pins.items():
+        artifact = squash(open(os.path.join(LAB, "site", "anatomy", art)).read())
+        if squash(pin) not in idx_lc:
+            sys.exit(f"build aborted: trace pin {pin!r} missing from index.html")
+        if squash(pin) not in artifact:
+            sys.exit(f"build aborted: trace pin {pin!r} not found in "
+                     f"anatomy/{art} — page claim has drifted from the artifact")
+
+    # the open-PR snapshot is a dated static claim; nag (don't block) when old
+    m = re.search(r"snapshot as of (\d{4}-\d{2}-\d{2})", idx_src)
+    if m:
+        age = (datetime.date.today()
+               - datetime.date.fromisoformat(m.group(1))).days
+        if age > 14:
+            print(f"WARNING: open-PR snapshot is {age} days old — refresh it "
+                  f"(tools/refresh_open_prs.py) before deploying")
     shutil.copytree(os.path.join(LAB, "site", "anatomy"),
                     os.path.join(EV, "anatomy"))
     for f in ("index.html", "details.html", "style.css", "app.js", "404.html",

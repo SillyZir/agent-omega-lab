@@ -72,6 +72,9 @@ def main(root):
                 if m:
                     err(f"forbidden content in {p}: {m.group(0)!r}")
 
+    # two passes: collect every page's ids first so cross-page anchors
+    # (e.g. anatomy.html#merge) resolve against the real target page
+    parsed = {}
     for page in ("index.html", "details.html", "404.html", "anatomy.html"):
         fp = os.path.join(root, page)
         if not os.path.exists(fp):
@@ -80,6 +83,9 @@ def main(root):
         h = open(fp).read()
         c = Check()
         c.feed(h)
+        parsed[page] = (c, h)
+
+    for page, (c, h) in parsed.items():
         if c.stack:
             err(f"{page}: unclosed tags {c.stack}")
         errs += [f"{page}: {e}" for e in c.errs]
@@ -94,11 +100,26 @@ def main(root):
                 if x[1:] not in c.ids:
                     err(f"{page}: dead anchor {x}")
             elif not re.match(r"^(https?:|data:|mailto:)", x):
-                target = os.path.join(root, x.split("#")[0].lstrip("/"))
+                base, _, frag = x.partition("#")
+                target = os.path.join(root, base.lstrip("/"))
                 if not os.path.exists(target):
                     err(f"{page}: missing local target {x}")
+                elif frag and base in parsed and frag not in parsed[base][0].ids:
+                    err(f"{page}: dead cross-page anchor {x}")
         if page == "index.html" and "Content-Security-Policy" not in h:
             err("index.html: CSP meta missing")
+
+    if "index.html" in parsed:
+        c, h = parsed["index.html"]
+        # the anatomy page must stay discoverable from the landing page
+        if "anatomy.html" not in {x.partition("#")[0] for x in c.hrefs}:
+            err("index.html: no link to anatomy.html — promotion regressed")
+        # an open-PR snapshot must carry its date stamp and honesty disclaimer
+        if "Under maintainer review" in h:
+            if not re.search(r"snapshot as of \d{4}-\d{2}-\d{2}", h):
+                err("index.html: open-PR snapshot lost its as-of date stamp")
+            if "may close without merging" not in h:
+                err("index.html: open-PR snapshot lost its disclaimer")
 
     og = os.path.join(root, "og.png")
     if not os.path.exists(og):
@@ -114,6 +135,9 @@ def main(root):
             err("proof_bad.txt lost its outcome marker")
         if ev("gates.txt").count("  PASS ") != 16:
             err("gates.txt does not show exactly 16 passing gates")
+        # the production run predates the 16th gate; its artifact shows 15
+        if ev("anatomy/gates.txt").count("  PASS ") != 15:
+            err("anatomy/gates.txt does not show exactly 15 passing gates")
     except OSError as e:
         err(f"evidence missing: {e}")
 
