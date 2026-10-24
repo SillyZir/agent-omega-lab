@@ -88,7 +88,6 @@ a.stat:hover span { color:var(--green); }
 .stat b em { font-style:normal; color:var(--green); }
 .stat span { color:var(--faint); font-size:12px; text-transform:uppercase;
              letter-spacing:.08em; }
-.statnotes { font-size:11.5px; color:var(--faint); margin-top:14px; line-height:1.6; }
 .repos { display:grid; grid-template-columns:1fr 1fr; gap:13px; }
 .repo { background:linear-gradient(180deg, var(--s2), var(--s1));
         border:1px solid var(--line); border-radius:var(--r2);
