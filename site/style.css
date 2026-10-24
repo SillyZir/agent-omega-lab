@@ -183,6 +183,23 @@ a.stat:hover span { color:var(--green); }
 .blocked { color:var(--amber); font-weight:700; }
 .notblocked { color:var(--bad); font-weight:700; background:#ff6f6622; }
 
+/* anatomy teaser */
+.teaser { background:linear-gradient(180deg, var(--s2), var(--s1));
+          border:1px solid var(--line2); border-radius:var(--r3);
+          padding:26px 28px; display:grid; grid-template-columns:1fr auto;
+          gap:24px; align-items:center;
+          box-shadow:0 24px 60px -32px #000, 0 0 0 1px #ffffff06 inset; }
+.teaser > * { min-width:0; }
+.teaser h2 { font-size:clamp(19px, 2.6vw, 24px); line-height:1.25; }
+.hl2 { color:var(--green); }
+.tl { list-style:none; margin:14px 0 0; padding:0; display:flex; gap:26px;
+      flex-wrap:wrap; font-size:13px; color:var(--dim); }
+.tl li { position:relative; max-width:200px; line-height:1.45; }
+.tl li:not(:last-child)::after { content:"→"; position:absolute; right:-19px;
+      top:1px; color:var(--faint); }
+.tl b { display:block; color:var(--fg); font-variant-numeric:tabular-nums; }
+.teasercta { display:flex; flex-direction:column; align-items:flex-start; }
+
 /* PR table */
 .prtable { background:var(--s1); border:1px solid var(--line); border-radius:var(--r2);
            overflow:hidden; }
@@ -296,6 +313,10 @@ footer section { padding:26px 24px; font-size:13px; color:var(--faint); }
   .feats { grid-template-columns:1fr 1fr; }
   .decs { grid-template-columns:1fr; }
   .spine { grid-template-columns:1fr; gap:10px; }
+  .teaser { grid-template-columns:1fr; padding:20px; }
+  .tl { flex-direction:column; gap:10px; }
+  .tl li { max-width:none; }
+  .tl li:not(:last-child)::after { content:"↓"; position:static; margin-left:8px; }
   .spine li:not(:last-child)::after { content:"↓"; right:auto; left:19px;
       top:auto; bottom:-13px; width:auto; }
   /* PR table collapses into cards */
