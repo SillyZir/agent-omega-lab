@@ -109,7 +109,15 @@ function wireTrace() {
   start();
 }
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-eager][data-fill]').forEach(fill);
+  const eager = [...document.querySelectorAll('[data-eager][data-fill]')];
+  // eager consoles change height as they load, shifting a fragment target
+  // the browser already scrolled to — re-anchor once they're all in
+  Promise.all(eager.map(fill)).then(() => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id || ['gates', 'inject', 'view-inject'].includes(id)) return;
+    const el = document.getElementById(id);
+    if (el && eager.length) el.scrollIntoView();
+  });
   const showView = wireScenarios();
   handleHash(showView);
   window.addEventListener('hashchange', () => handleHash(showView));
