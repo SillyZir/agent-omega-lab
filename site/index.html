@@ -80,6 +80,41 @@
 </section>
 </div>
 
+<section id="workflow" style="padding-top:10px" aria-label="How a fix moves through the system">
+  <div class="seckick">The workflow</div>
+  <h2>From open issue to upstream pull request</h2>
+  <p class="cap">Five stages. The model proposes; deterministic checks hold the
+  authority to ship. Every stage links to the real artifact it produced — in
+  production, or in the recorded demo below.</p>
+  <ol class="spine">
+    <li><span class="sn" aria-hidden="true">1</span><b>Discover</b>
+      <span class="ptag rec">production · recorded</span>
+      <p>A daily scout ranks every open candidate issue; the executor picks
+      unprompted.</p>
+      <a href="anatomy.html#scout">the scout's ranking row →</a></li>
+    <li><span class="sn" aria-hidden="true">2</span><b>Investigate</b>
+      <span class="ptag bench">benchmarked</span>
+      <p>A read-only session names the faulty files from the issue text alone
+      — 88–93% top-1 on 37 ground-truth issues.</p>
+      <a href="anatomy.html#fix">the localization it declared →</a></li>
+    <li><span class="sn" aria-hidden="true">3</span><b>Fix</b>
+      <span class="ptag rec">production · recorded</span>
+      <p>A bounded session — file tools, no shell — edits a fresh checkout;
+      only the diff is kept.</p>
+      <a href="anatomy.html#fix">the merged production diff →</a></li>
+    <li><span class="sn" aria-hidden="true">4</span><b>Verify</b>
+      <span class="ptag det">deterministic</span>
+      <p>A fix-blind regression test must FAIL on base and PASS on patch;
+      judge ×2; 16 fail-closed gates.</p>
+      <a href="#gates">inspect all 16 gates →</a></li>
+    <li><span class="sn" aria-hidden="true">5</span><b>Submit</b>
+      <span class="ptag hum">maintainer's call</span>
+      <p>A pull request a maintainer reviews on its own merits. Omega only
+      reads the public state afterward.</p>
+      <a href="#prs">the merged-PR record →</a></li>
+  </ol>
+</section>
+
 <section id="demo" style="padding-top:12px" aria-label="Recorded demonstration">
   <div class="democard">
     <div class="demohead"><span class="dot" aria-hidden="true"></span> Live Demonstration

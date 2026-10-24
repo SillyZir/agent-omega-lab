@@ -107,6 +107,28 @@ a.stat:hover span { color:var(--green); }
 .badge.a { color:var(--blue); background:#6cb6ff1a; border:1px solid #6cb6ff33; }
 .repo.wide { grid-column:1 / -1; justify-content:space-between; }
 
+/* workflow spine */
+.spine { list-style:none; display:grid; grid-template-columns:repeat(5,1fr);
+         gap:13px; margin:18px 0 0; padding:0; counter-reset:stage; }
+.spine li { position:relative; background:var(--s1); border:1px solid var(--line);
+            border-radius:var(--r2); padding:16px 15px 14px; font-size:12.8px;
+            color:var(--dim); min-width:0; }
+.spine li:not(:last-child)::after { content:"→"; position:absolute;
+            right:-13px; top:18px; width:13px; text-align:center;
+            color:var(--faint); font-size:13px; }
+.spine .sn { display:inline-grid; place-items:center; width:22px; height:22px;
+             border-radius:50%; background:#3fd68f1a; border:1px solid #3fd68f44;
+             color:var(--green); font:700 11px/1 var(--mono); margin-bottom:9px; }
+.spine b { display:block; color:var(--fg); font-size:14px; margin-bottom:3px; }
+.spine p { margin:7px 0 9px; line-height:1.5; }
+.spine a { font-size:12.3px; }
+.ptag { display:inline-block; font-size:9.5px; padding:1px 8px; border-radius:20px;
+        font-weight:700; letter-spacing:.07em; text-transform:uppercase; }
+.ptag.rec { color:var(--amber); background:#d9a62e14; border:1px solid #d9a62e33; }
+.ptag.det { color:var(--blue); background:#6cb6ff14; border:1px solid #6cb6ff33; }
+.ptag.bench { color:#aab2ff; background:#8e96f31a; border:1px solid #8e96f338; }
+.ptag.hum { color:var(--green); background:#3fd68f14; border:1px solid #3fd68f33; }
+
 /* demo card */
 .democard { background:var(--s1); border:1px solid var(--line2);
             border-radius:var(--r3); overflow:hidden;
@@ -273,6 +295,9 @@ footer section { padding:26px 24px; font-size:13px; color:var(--faint); }
   .grid2 { grid-template-columns:1fr; }
   .feats { grid-template-columns:1fr 1fr; }
   .decs { grid-template-columns:1fr; }
+  .spine { grid-template-columns:1fr; gap:10px; }
+  .spine li:not(:last-child)::after { content:"↓"; right:auto; left:19px;
+      top:auto; bottom:-13px; width:auto; }
   /* PR table collapses into cards */
   .prtable table, .prtable tbody, .prtable tr, .prtable td { display:block; }
   .prtable thead { display:none; }
