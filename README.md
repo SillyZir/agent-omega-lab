@@ -104,7 +104,7 @@ you can [verify on GitHub](https://github.com/ethereum/go-ethereum/commit/d4027f
 
 - The seeded bug is synthetic and easier than production work. The evidence
   that the same architecture handles real codebases is the showcase's
-  [11 merged PRs](https://github.com/SillyZir/Agent-Omega#proven-outcomes--merged-upstream-contributions)
+  [10 merged PRs](https://github.com/SillyZir/Agent-Omega#proven-outcomes--merged-upstream-contributions)
   in Caddy, rclone, go-ethereum, and k3s — and `make realworld` here.
 - Six of the 16 gates read operational state (breaker, budgets, capacity,
   per-repo policy); in this lab they read `fixtures/` instead of the live

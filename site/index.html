@@ -85,7 +85,7 @@
     <li><span class="sn" aria-hidden="true">2</span><b>Investigate</b>
       <span class="ptag bench">benchmarked</span>
       <p>A read-only session names the faulty files from the issue text alone
-      — 88–93% top-1 on 37 ground-truth issues.</p>
+      — 78.4% top-1 on 37 ground-truth issues (29 of 37).</p>
       <a href="anatomy.html#fix">the localization it declared →</a></li>
     <li><span class="sn" aria-hidden="true">3</span><b>Fix</b>
       <span class="ptag rec">production · recorded</span>
@@ -180,7 +180,7 @@
 <section id="prs" style="padding-top:22px">
   <div class="seckick">Production record</div>
   <h2>Merged pull requests</h2>
-  <p class="cap">Every link is the public record on GitHub.</p>
+  <p class="cap">Every link is the public record on GitHub. These are the 11 merged code changes in externally-owned repositories, from 74 pull requests submitted to 30 such repositories (GitHub API, 2026-10-24). A twelfth merged PR, <code>naimkatiman/tradeclaw#48</code> (April 2026), is a documentation edit that predates this system and is not a repair.</p>
   <div class="prtable"><table>
     <thead><tr><th>Repository</th><th>PR</th><th class="t">Change</th><th>Status</th><th>Merged</th></tr></thead>
     <tbody>
@@ -279,7 +279,7 @@
   <h2>Full technical details</h2>
   <details class="acc"><summary>Pipeline architecture</summary><div class="inner">
     <ul>
-      <li><b>Localize</b> — a read-only model session names the faulty files from the issue text alone <i>(88–93% top-1 on 37 ground-truth issues; keyword baseline 11%)</i>.</li>
+      <li><b>Localize</b> — a read-only model session names the faulty files from the issue text alone <i>(78.4% top-1 on 37 ground-truth issues; keyword baseline 10.8%)</i>.</li>
       <li><b>Patch</b> — a bounded session (file tools, no shell) edits the checkout; only the diff is kept.</li>
       <li><b>Regression test</b> — a fix-blind session writes a test that must FAIL on base and PASS on patch, twice, stably.</li>
       <li><b>Judge ×2</b> — independent review passes; the second reads <i>neutralized</i> issue text so steering produces a divergence.</li>
@@ -311,8 +311,8 @@
   </div></details>
   <details class="acc"><summary>Numbers &amp; limitations</summary><div class="inner">
     <ul>
-      <li><b>Localization:</b> 88–93% top-1 (100% top-3) on 37 issues with merged human fixes.</li>
-      <li><b>Fixes:</b> validated against merged human fixes pre-launch; 4/5 decisive runs passed the maintainers' own tests.</li>
+      <li><b>Localization:</b> 78.4% top-1 (29/37) and 89.2% top-3 (33/37) on 37 issues with merged human fixes; keyword baseline 10.8% (4/37).</li>
+      <li><b>Fixes:</b> an LLM judge — not test execution — rated 45.9% of patches (17/37) equivalent to the merged human fix. Of 45 end-to-end validation runs against the projects' own test suites, 4 produced a test-verified fix, 9 demonstrably failed, and 32 were environmentally inconclusive.</li>
       <li><b>Honest negatives:</b> a Rust expansion closed NO-PROMOTE on pre-registered bars, twice; one PR withdrawn as a design finding.</li>
       <li>The seeded demo bug is easier than production work; recorded output is recorded; live sessions vary.</li>
       <li>A merged PR proves a change passed one repository's review — nothing more universal.</li>
