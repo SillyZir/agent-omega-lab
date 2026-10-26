@@ -22,7 +22,7 @@
 
 <header class="nav"><div class="wrapm">
   <span class="brand"><span class="om">Ω</span> Agent Omega</span>
-  <nav aria-label="Sections" style="display:contents">
+  <nav aria-label="Sections">
     <a class="nl" href="#demo">Demo</a>
     <a class="nl" href="anatomy.html">Anatomy</a>
     <a class="nl" href="#prs">Merged PRs</a>
@@ -46,13 +46,13 @@
       <a class="btn primary" href="#demo">Explore the demo ↓</a>
       <a class="btn blue" href="#prs">Merged PRs ↓</a></p>
   </div>
-  <div class="trace rise d2" role="img" aria-label="Replay of the one fully
-       autonomous production run: discover, investigate, fix, verify, submit —
-       every stage completed, and the maintainer merged pull request 9707.">
+  <div class="trace rise d2">
     <div class="tracehead"><span class="dot" aria-hidden="true"></span>
       one production run — replayed
       <span class="mode">esengine/DeepSeek-Reasonix · 2026-09-01</span></div>
-    <ol class="tstages">
+    <ol class="tstages" role="img" aria-label="Replay of the autonomous
+        production run behind pull request 9707: discover, investigate, fix,
+        verify, submit — every stage completed, and the maintainer merged it.">
       <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Discover</b>
         <code class="tsnip">scout: issue 9516 scored 0.87 — repro evidence in body, bug-class label</code></div></li>
       <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Investigate</b>
@@ -60,7 +60,7 @@
       <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Fix</b>
         <code class="tsnip">patch: suppresses per-tool duplicates, never the whole live directory</code></div></li>
       <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Verify</b>
-        <code class="tsnip">test: FAIL on the unpatched tree → PASS on patch · judge ×2 correct · 15 gates PASS</code></div></li>
+        <code class="tsnip">test: FAIL on the unpatched tree → PASS on patch · judge ×2 correct · all 15 gates then in force PASS</code></div></li>
       <li class="tstage"><span class="tg" aria-hidden="true"></span><div class="tbody"><b>Submit</b>
         <code class="tsnip">PR #9707 opened 09:53 · merged by the maintainer Sept 25</code></div></li>
     </ol>
@@ -166,7 +166,7 @@
           <span class="hl2">No human in the loop.</span></h2>
       <ol class="tl">
         <li><b>Aug 28</b> a user files an ordinary bug report</li>
-        <li><b>Sept 1</b> Omega ships the fix — 18 minutes, selection to pull request</li>
+        <li><b>Sept 1</b> Omega ships the fix — 18 minutes, pipeline start to pull request</li>
         <li><b>Sept 25</b> the project's maintainer merges it</li>
       </ol>
     </div>
@@ -180,7 +180,7 @@
 <section id="prs" style="padding-top:22px">
   <div class="seckick">Production record</div>
   <h2>Merged pull requests</h2>
-  <p class="cap">Every link is the public record on GitHub. These are the 11 merged code changes in externally-owned repositories, from 74 pull requests submitted to 30 such repositories (GitHub API, 2026-10-24). A twelfth merged PR, <code>naimkatiman/tradeclaw#48</code> (April 2026), is a documentation edit that predates this system and is not a repair.</p>
+  <p class="cap">Every link is the public record on GitHub. These are the 12 merged code changes in externally-owned repositories, from 74 pull requests submitted to 30 such repositories (GitHub API, 2026-10-26). A thirteenth merged PR, <code>naimkatiman/tradeclaw#48</code> (April 2026), is a documentation edit that predates this system and is not a repair.</p>
   <div class="prtable"><table>
     <thead><tr><th>Repository</th><th>PR</th><th class="t">Change</th><th>Status</th><th>Merged</th></tr></thead>
     <tbody>
@@ -373,8 +373,8 @@ make demo</code>
       page traces to a file you can read.
       <a href="#details">technical details &amp; raw artifacts →</a></div>
     <div class="feat"><span class="ic" aria-hidden="true">⌁</span><b>Follow the open work</b>
-      Nine PRs are under maintainer review right now; the system code and its
-      documentation are public.
+      Several PRs sit under maintainer review right now; the system code and
+      its documentation are public.
       <a href="#review">the review queue →</a>
       <a href="https://github.com/SillyZir/Agent-Omega">system showcase →</a></div>
   </div>
