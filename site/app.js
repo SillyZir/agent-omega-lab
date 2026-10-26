@@ -62,7 +62,8 @@ function wireScenarios() {
 function handleHash(showView) {
   const h = location.hash;
   if (h === '#inject' || h === '#view-inject') { showView('inject');
-    document.getElementById('demo').scrollIntoView(); }
+    const demo = document.getElementById('demo');
+    if (demo) demo.scrollIntoView(); }
   if (h === '#gates') { showView('good');
     const d = document.getElementById('gates');
     if (d) { d.open = true; d.querySelectorAll('[data-fill]').forEach(fill);
@@ -102,7 +103,7 @@ function wireTrace() {
     () => document.hidden ? stop() : start());
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(es => {
-      onscreen = es[0].isIntersecting;
+      onscreen = es[es.length - 1].isIntersecting;
       onscreen ? start() : stop();
     }, {threshold: .25}).observe(trace);
   }
