@@ -61,7 +61,7 @@ def main(root):
         errs.append(msg)
 
     for dirpath, dirnames, files in os.walk(root):
-        dirnames[:] = [x for x in dirnames if x not in (".git", ".github")]
+        dirnames[:] = [x for x in dirnames if x != ".git"]
         for f in files:
             p = os.path.join(dirpath, f)
             raw = open(p, "rb").read()
@@ -104,8 +104,16 @@ def main(root):
                 target = os.path.join(root, base.lstrip("/"))
                 if not os.path.exists(target):
                     err(f"{page}: missing local target {x}")
-                elif frag and base in parsed and frag not in parsed[base][0].ids:
-                    err(f"{page}: dead cross-page anchor {x}")
+                elif frag:
+                    # normalize ./x.html, /x.html and bare "/" so prefixed
+                    # forms don't silently dodge the fragment check
+                    norm = base.lstrip("/")
+                    if norm.startswith("./"):
+                        norm = norm[2:]
+                    if norm == "":
+                        norm = "index.html"
+                    if norm in parsed and frag not in parsed[norm][0].ids:
+                        err(f"{page}: dead cross-page anchor {x}")
         if page == "index.html" and "Content-Security-Policy" not in h:
             err("index.html: CSP meta missing")
 
@@ -115,7 +123,9 @@ def main(root):
         if "anatomy.html" not in {x.partition("#")[0] for x in c.hrefs}:
             err("index.html: no link to anatomy.html — promotion regressed")
         # an open-PR snapshot must carry its date stamp and honesty disclaimer
-        if "Under maintainer review" in h:
+        # (keyed on the machine marker, not display copy, so a heading rename
+        # can't silently disable the locks)
+        if "open-prs:start" in h:
             if not re.search(r"snapshot as of \d{4}-\d{2}-\d{2}", h):
                 err("index.html: open-PR snapshot lost its as-of date stamp")
             if "may close without merging" not in h:

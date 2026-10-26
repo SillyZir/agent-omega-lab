@@ -36,11 +36,15 @@ site-gate:        ## regression suite for the publication gates (publishes nothi
 #
 # The test is in the recipe, not an `ifndef` conditional: make evaluates conditionals when
 # it parses the file, so an `ifndef MSG` here would abort `make demo` too.
+# MSG travels to the recipe via the environment, not via $(MSG) interpolation
+# into the shell line: quotes, backticks and $() in a commit message must be
+# data, never shell syntax.
+site-deploy: export OMEGA_MSG = $(MSG)
 site-deploy:      ## build + audit + PUSH omegademo.com (CI re-audits, then deploys)
-	@test -n "$(strip $(MSG))" || { \
+	@test -n "$$(printf '%s' "$$OMEGA_MSG" | tr -d '[:space:]')" || { \
 	  echo 'make site-deploy: MSG is required, e.g. make site-deploy MSG="fix the nav"'; \
 	  exit 1; }
-	python3 tools/deploy_site.py publish -m "$(MSG)"
+	python3 tools/deploy_site.py publish -m "$$OMEGA_MSG"
 
 open-prs:         ## verify the open-PR snapshot against GitHub and restamp it
 	python3 tools/refresh_open_prs.py

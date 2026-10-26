@@ -9,10 +9,10 @@ Reproducible deploy pipeline:
      survives in the output tree;
   4. writes dist/ ready to push to the Pages repository.
 
-Update the live site: re-run this, then sync dist/ into a clone of
-SillyZir/omegademos (clone fresh if absent: `git clone` + rsync --delete
---exclude .git), commit, push. Roll back: git revert there. Nothing here
-contacts a model.
+Update the live site: `make site-deploy MSG="..."` (tools/deploy_site.py
+publish — rebuilds, re-audits, then pushes; never sync dist/ by hand, that
+bypasses the publish gates). Roll back: git revert in the Pages repo clone.
+Nothing here contacts a model.
 """
 
 import datetime
@@ -192,11 +192,24 @@ def main():
         "merged by the maintainer": "merge.txt",
     }
     squash = lambda s: re.sub(r"\s+", " ", s.lower())
-    idx_lc = squash(idx_src)
+    # pins are checked against the trace element only — a pin surviving
+    # elsewhere on the page (e.g. "9707" in the PR table) must not mask
+    # drift in the trace itself
+    t0 = idx_src.find('class="trace')
+    t1 = idx_src.find("</ol>", t0)
+    if t0 == -1 or t1 == -1:
+        sys.exit("build aborted: hero trace element not found in index.html")
+    trace_lc = squash(idx_src[t0:t1])
     for pin, art in trace_pins.items():
-        artifact = squash(open(os.path.join(LAB, "site", "anatomy", art)).read())
-        if squash(pin) not in idx_lc:
-            sys.exit(f"build aborted: trace pin {pin!r} missing from index.html")
+        try:
+            artifact = squash(
+                open(os.path.join(LAB, "site", "anatomy", art)).read())
+        except OSError as e:
+            sys.exit(f"build aborted: trace-pin artifact anatomy/{art} "
+                     f"unreadable: {e}")
+        if squash(pin) not in trace_lc:
+            sys.exit(f"build aborted: trace pin {pin!r} missing from the "
+                     f"hero trace in index.html")
         if squash(pin) not in artifact:
             sys.exit(f"build aborted: trace pin {pin!r} not found in "
                      f"anatomy/{art} — page claim has drifted from the artifact")
